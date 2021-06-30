@@ -28,9 +28,25 @@ function paintToCanvas() {
   canvas.width = width;
   canvas.height = height;
 
-  setInterval(() => {
+  return setInterval(() => {
     ctx.drawImage(video, 0, 0, width, height);
   }, 16);
 }
 
+function takePhoto() {
+  // play the sound
+  snap.currenTime = 0;
+  snap.play();
+
+  // take the data out of the canvas
+  const data = canvas.toDataURL("image/jpeg");
+  const link = document.createElement("a");
+  link.href = data;
+  link.setAttribute("download", "handsome");
+  link.innerHTML = `<img src"${data}" alt="Handsome person" />`;
+  strip.insertBefore(link, strip.firstChild);
+}
+
 getVideo();
+
+video.addEventListener("canplay", paintToCanvas);
