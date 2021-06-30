@@ -30,6 +30,12 @@ function paintToCanvas() {
 
   return setInterval(() => {
     ctx.drawImage(video, 0, 0, width, height);
+    // take pixels out
+    let pixels = ctx.getImageData(0, 0, width, height); // array of numbers of pixels's RGBA values
+    // mess with them
+    pixels = redEffect(pixels);
+    // put them back
+    ctx.putImageData(pixels, 0, 0);
   }, 16);
 }
 
@@ -45,6 +51,15 @@ function takePhoto() {
   link.setAttribute("download", "handsome");
   link.innerHTML = `<img src"${data}" alt="Handsome person" />`;
   strip.insertBefore(link, strip.firstChild);
+}
+
+function redEffect(pixels) {
+  for (let i = 0; i < pixels.data.length; i += 4) {
+    pixels.data[i + 0] = pixels.data[i + 0] + 100; // red
+    pixels.data[i + 1] = pixels.data[i + 1] - 50; // green
+    pixels.data[i + 2] = pixels.data[i + 2] * 0.5; // blue
+  }
+  return pixels;
 }
 
 getVideo();
