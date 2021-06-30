@@ -9,17 +9,28 @@ function getVideo() {
     .getUserMedia({ video: true, audio: false })
     .then((localMediaStream) => {
       console.log(localMediaStream);
-      // video.src = window.URL.createObjectURL(localMediaStream); /!\ deprecated way
+
       try {
-        video.srcObject = localMediaStream;
+        video.srcObject = localMediaStream; // new way
       } catch (error) {
-        video.src = window.URL.createObjectURL(localMediaStream);
+        video.src = window.URL.createObjectURL(localMediaStream); // /!\ deprecated way
       }
       video.play();
     })
     .catch((err) => {
       console.error("Oh noooo !", err);
     });
+}
+
+function paintToCanvas() {
+  const width = video.videoWidth;
+  const height = video.videoHeight;
+  canvas.width = width;
+  canvas.height = height;
+
+  setInterval(() => {
+    ctx.drawImage(video, 0, 0, width, height);
+  }, 16);
 }
 
 getVideo();
